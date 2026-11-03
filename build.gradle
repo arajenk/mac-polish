@@ -1,0 +1,67 @@
+plugins {
+	id 'net.fabricmc.fabric-loom' version "${loom_version}"
+}
+
+repositories {
+	mavenCentral()
+	maven {
+		name = 'TerraformersMC'
+		url = 'https://maven.terraformersmc.com/releases/'
+		content {
+			includeGroup 'com.terraformersmc'
+		}
+	}
+}
+
+loom {
+	runs {
+		client {
+			// Dev runs only: writes patched classes to run/.mixin.out for inspection.
+			vmArg '-Dmixin.debug.export=true'
+		}
+	}
+}
+
+fabricApi {
+	configureTests {
+		createSourceSet = true
+		modId = 'macpolish-gametest'
+		enableGameTests = false
+		enableClientGameTests = true
+	}
+}
+
+dependencies {
+	// 26.x ships unobfuscated with Mojang's names, so there is no mappings line.
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+	// Optional at runtime: Mod Menu only provides the way to open the settings screen.
+	compileOnly "com.terraformersmc:modmenu:21.0.0"
+	localRuntime "com.terraformersmc:modmenu:21.0.0"
+
+	testImplementation 'org.junit.jupiter:junit-jupiter:5.13.4'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.13.4'
+}
+
+processResources {
+	def version = project.version
+	inputs.property "version", version
+	filesMatching("fabric.mod.json") {
+		expand "version": version
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 25
+}
+
+java {
+	sourceCompatibility = JavaVersion.VERSION_25
+	targetCompatibility = JavaVersion.VERSION_25
+}
+
+test {
+	useJUnitPlatform()
+}
