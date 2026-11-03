@@ -22,7 +22,7 @@ Needs Fabric Loader and Java 25. Fabric API isn't needed.
 
 Move `build/libs/macpolish-1.3.0.jar` to your `mods` folder.
 
-Only tested on one notched Apple Silicon MacBook on macOS 26.5.2, so open an issue if it acts differently on yours. Don't use it with MacOS Input Fixes.
+Only tested on one notched Apple Silicon MacBook on macOS 26.5.2, so open an issue if it acts differently on yours.
 
 ## Settings
 
