@@ -27,9 +27,6 @@
       "dev.macpolish.ModMenuIntegration"
     ]
   },
-  "conflicts": {
-    "macos_input_fixes_helper": "*"
-  },
   "suggests": {
     "modmenu": "*"
   }
