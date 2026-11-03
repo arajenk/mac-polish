@@ -1,71 +1,58 @@
 # Mac Polish
 
-Client-side Fabric mod for Minecraft 26.3. It only does anything on macOS: on other systems its
-mixins aren't applied at all. It only needs Fabric Loader.
+Fixes for Minecraft 26.3 on Mac. Client-side Fabric mod, does nothing on other systems.
 
-Build with `./gradlew build`. The jar is `build/libs/macpolish-1.3.0.jar`; copy it to your
-`mods` folder.
-
-## Fixes
-
-### 1. Pointer unlocked and cursor visible after Cmd-Tab
-`PointerLockMixin` and `CocoaPointerLock`: after a focus change, SDL 3.4.14 can get stuck in its
-"focus click pending" state. It then skips locking the pointer and hiding the cursor while still
-reporting relative mode as on, so the pointer roams behind the game, shows at the screen edges, and
-can open the menu bar or Dock. During play this clears that state through SDL's own window listener,
-which makes SDL re-apply the lock, and ignores mouse movement for 3 frames so the camera doesn't jump.
-
-It waits while a mouse button is held, and turns itself off if a future SDL renames these methods.
-
-Test each of these in the full-screen mode you play in:
-1. In a world, look all the way up and down. The cursor should stay hidden.
-2. Cmd-Tab away and straight back, then repeat. The cursor should stay hidden with no camera jump.
-3. Cmd-Tab away for a few seconds so the pause menu opens, come back, click Back to Game, and repeat.
-4. Open your inventory, Cmd-Tab away and back. The cursor should stay visible and usable.
-
-### 2. Shift+scroll goes the wrong way (optional, off by default)
-`ShiftScrollMixin`: vanilla's Shift+scroll is right on a stock Mac. It goes the opposite way to normal
-scrolling if something changes vertical scrolling but not horizontal, such as Scroll Reverser setting
-your mouse to Classic while macOS stays on natural. Set `flipShiftScroll=true` if that's your setup.
-
-To test, scroll over the hotbar with and without Shift. The selection should move the same way.
-
-### 3. Held item cut off on Mac displays
 | Before | After |
 |---|---|
 | ![Before](docs/images/framing-before.png) | ![After](docs/images/framing-after.png) |
 
-`HeldItemFramingMixin` and `HeldItemFraming`: Mac screens are narrower than 16:9, which moves the
-screen edge inward and cuts off more of the item in your hand. This slides the hand toward the center
-by exactly that difference, using a shear rather than a 3D move, so it is the same image you would see
-at 16:9, in the same place relative to the edge. Screens at 16:9 or wider are unchanged, two-handed maps
-stay centered, and an empty hand stays where vanilla puts it.
+## Features
 
-To test, hold an axe or sword in full screen with any small-tools resource pack turned off. Then check
-attack swings, eating, a shield or bow, an empty hand, the off hand, and a map in one and both hands.
+- Keeps your cursor locked and hidden after Cmd-Tab, so it can't open the Dock or menu bar mid-game
+- Moves held items back to where they'd sit on a 16:9 screen, since Mac screens cut off more of them
+- Optional fix for Shift+scroll going the opposite way to normal scrolling, off by default
 
-`./gradlew runClientGameTest` renders the held item at 16:9 and at Mac aspect ratios to compare. The
-screenshots go to `build/run/clientGameTest/screenshots`. This test is not part of the jar.
+## Install
+
+Needs Fabric Loader and Java 25. Fabric API isn't needed.
+
+```sh
+./gradlew build
+```
+
+Move `build/libs/macpolish-1.3.0.jar` to your `mods` folder.
+
+Only tested on one notched Apple Silicon MacBook on macOS 26.5.2, so open an issue if it acts differently on yours. Don't use it with MacOS Input Fixes.
 
 ## Settings
-With Mod Menu installed, open Mods, select Mac Polish and click the settings icon. Each fix has its
-own on/off button that applies right away. Inside a world the background stays clear, so you can watch
-the held item move behind the screen, which makes a quick before and after.
 
-Without Mod Menu, edit `config/macpolish.properties`, created on first launch, and restart the game.
+With Mod Menu, open Mods, select Mac Polish, and click the settings icon. Changes apply right away.
 
-| Setting | Default | What it does |
+Without it, edit `config/macpolish.properties` and restart.
+
+| Setting | Default | Fix |
 |---|---|---|
-| `pointerLockRepair` | `true` | Keeps the pointer locked after Cmd-Tab, see fix 1 |
-| `flipShiftScroll` | `false` | Reverses Shift+scroll, see fix 2 |
-| `heldItemFraming` | `true` | Frames held items as at 16:9, see fix 3 |
+| `pointerLockRepair` | `true` | Cursor after Cmd-Tab |
+| `heldItemFraming` | `true` | Held items |
+| `flipShiftScroll` | `false` | Shift+scroll |
 
-## Adding a fix
-1. Add one mixin to `dev.macpolish.mixin`. Keep logic that can be unit tested in its own class.
-2. List it under `client` in `macpolish.mixins.json`.
-3. Add a setting to `MacPolishConfig`, and a toggle and text to `MacPolishConfigScreen` and `en_us.json`.
+## How it works
 
-It is then limited to macOS automatically by `MacOnlyMixinPlugin`.
+**Cursor.** After a focus change, SDL 3.4.14 can get stuck in its "focus click pending" state. It then skips locking the pointer and hiding the cursor, but still reports relative mode as on. This clears that state through SDL's own window listener, so SDL applies the lock again. It waits while a mouse button is held, and turns itself off if a future SDL renames these methods.
+
+**Held items.** Slides the hand toward the center by the difference between your screen and 16:9. It uses a shear instead of a 3D move, so the item looks the same as it would at 16:9. Screens at 16:9 or wider are unchanged, two-handed maps stay centered, and an empty hand stays where it normally is.
+
+**Shift+scroll.** Vanilla is right on a stock Mac. It only comes out reversed when something changes vertical scrolling but not horizontal, like Scroll Reverser setting your mouse to Classic while macOS stays on natural.
+
+## Development
+
+```sh
+./gradlew test
+./gradlew runClientGameTest
+```
+
+The game test renders the held item at 16:9 and at Mac aspect ratios, with screenshots in `build/run/clientGameTest/screenshots`.
 
 ## License
-MIT, see `LICENSE`.
+
+MIT
