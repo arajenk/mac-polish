@@ -1,0 +1,10 @@
+{
+  "macpolish.config.title": "Mac Polish",
+  "macpolish.config.hint": "Changes apply right away.",
+  "macpolish.config.pointer_lock_repair": "Cursor Fix After Cmd-Tab",
+  "macpolish.config.pointer_lock_repair.tooltip": "Keeps the pointer locked after you tab back in, so the cursor stays hidden and the menu bar and Dock can't take your input.",
+  "macpolish.config.flip_shift_scroll": "Reverse Shift+Scroll",
+  "macpolish.config.flip_shift_scroll.tooltip": "Turn this on if Shift+scroll goes the opposite way to normal scrolling. This can happen if an app like Scroll Reverser sets your mouse to Classic while macOS stays on natural.",
+  "macpolish.config.held_item_framing": "16:9 Held Item Framing",
+  "macpolish.config.held_item_framing.tooltip": "Mac screens are narrower than 16:9, which cuts off more of the item in your hand. This places it the way it looks on a 16:9 screen."
+}

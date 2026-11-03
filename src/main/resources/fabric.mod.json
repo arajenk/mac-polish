@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "macpolish",
+  "version": "${version}",
+  "name": "Mac Polish",
+  "description": "Fixes macOS bugs: pointer unlocked and cursor visible after Cmd-Tab, reversed Shift+scroll, held item cut off by narrower screens.",
+  "authors": ["arajenk"],
+  "contact": {
+    "sources": "https://github.com/arajenk/mac-polish",
+    "issues": "https://github.com/arajenk/mac-polish/issues"
+  },
+  "license": "MIT",
+  "environment": "client",
+  "mixins": [
+    {
+      "config": "macpolish.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.20.1",
+    "minecraft": "~26.3",
+    "java": ">=25"
+  },
+  "entrypoints": {
+    "modmenu": [
+      "dev.macpolish.ModMenuIntegration"
+    ]
+  },
+  "conflicts": {
+    "macos_input_fixes_helper": "*"
+  },
+  "suggests": {
+    "modmenu": "*"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "dev.macpolish.mixin",
+  "plugin": "dev.macpolish.MacOnlyMixinPlugin",
+  "compatibilityLevel": "JAVA_25",
+  "client": [
+    "HeldItemFramingMixin",
+    "PointerLockMixin",
+    "ShiftScrollMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

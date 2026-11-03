@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "macpolish-gametest",
+  "version": "1",
+  "name": "Mac Polish screenshots",
+  "environment": "client",
+  "entrypoints": {
+    "fabric-client-gametest": [
+      "dev.macpolish.gametest.FramingScreenshots"
+    ]
+  }
+}
